@@ -260,5 +260,4 @@ paket-files/
 __pycache__/
 *.pyc
 /desktop.ini
-/src/KsWare.AppVeyorClient/Api/Contracts/Common/ProjectSettings2.json
-/src/KsWare.AppVeyorClient/Api/Contracts/Common/UpdateProject2.json
+
