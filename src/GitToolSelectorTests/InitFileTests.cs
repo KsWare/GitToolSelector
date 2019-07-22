@@ -1,10 +1,7 @@
-﻿using System;
-using System.IO;
-using System.Reflection;
-using KsWare.ToolSelector;
+﻿using KsWare.GitToolSelector;
 using NUnit.Framework;
-using static KsWare.ToolSelectorTests.TestHelper;
-namespace ToolSelectorTests
+
+namespace KsWare.GitToolSelectorTests
 {
     [TestFixture]
     public class InitFileTests
@@ -12,7 +9,7 @@ namespace ToolSelectorTests
         [Test]
         public void TestMethod1()
         {
-            var n= GetTestDataPath("ToolSelector.conf");
+            var n= TestHelper.GetTestDataPath("ToolSelector.conf");
             var sut = new IniFile(n);
             Assert.That(sut.Read("a", "test1"),Is.EqualTo("\"C:\\Path\\foo.exe\" \"foo\" \"bar\""));
             Assert.That(sut.Read("b", "test1"),Is.EqualTo("\"C:\\Path\\foo.exe\" \"foo\" bar"));

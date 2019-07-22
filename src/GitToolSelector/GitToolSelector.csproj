@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{6F2B52B6-1839-48AD-8C72-C1722B26D7C4}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>KsWare.ToolSelector</RootNamespace>
-    <AssemblyName>ToolSelector</AssemblyName>
+    <RootNamespace>KsWare.GitToolSelector</RootNamespace>
+    <AssemblyName>GitToolSelector</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -50,7 +50,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="GitToolSelector.conf" />
+    <Content Include="GitToolSelector.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

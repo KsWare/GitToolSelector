@@ -5,11 +5,13 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace KsWare.ToolSelector
+namespace KsWare.GitToolSelector
 {
     class Program
     {
         static Dictionary<string,string> parameter=new Dictionary<string,string>();
+        private static ConfFile configuration;
+
         static void Main(string[] args)
         {
             var arguments = args.ToList();
@@ -21,11 +23,11 @@ namespace KsWare.ToolSelector
             }
 
             var ext = GetExtensionFromAnyFileParameter();
-            var conf = new ConfFile();
+            configuration = new ConfFile();
             var toolId = parameter["tool"];
-            var externalParser = conf.GetValue(ext, "ExternalParser");
+            var externalParser = configuration.GetValue(ext, "ExternalParser");
             parameter.Add("EXTERNALPARSER", externalParser);
-            var cmd = conf.GetValue($"tool {toolId}","cmd").Trim();
+            var cmd = configuration.GetValue($"tool {toolId}","cmd").Trim();
             var psiExe = ParseFileName(cmd);
             var psiParameter = cmd.Substring(psiExe.Length).Trim();
             psiExe=psiExe.Trim('"');
@@ -42,6 +44,10 @@ namespace KsWare.ToolSelector
             {
                 if(s.Key.Equals("tool",StringComparison.OrdinalIgnoreCase)) continue;
                 if(!s.Value.Contains("\\")) continue;
+				//TODO check exists to be sure its a filename
+                var ext=configuration.GetExtensionFromOverrides(s.Value);
+                if (ext != null) return ext;
+
                 var f = Path.GetFileName(s.Value);
                 if (f.Contains("."))
                 {

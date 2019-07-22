@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace KsWare.ToolSelector
+namespace KsWare.GitToolSelector
 {
     class ConfFile
     {
@@ -23,6 +19,12 @@ namespace KsWare.ToolSelector
                     _filterToSection.Add(filter,sectionName);
                 }
             }
+        }
+
+        public string GetExtensionFromOverrides(string fileName)
+        {
+            var ext = _iniFile.ReadMatch("Overrides", fileName);
+            return ext;
         }
 
         public string GetValue(string filter, string valueName)

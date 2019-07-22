@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
-namespace KsWare.ToolSelector
+namespace KsWare.GitToolSelector
 {
     class IniFile
     {
@@ -61,10 +61,43 @@ namespace KsWare.ToolSelector
 
             return value;
         }
+
+        public string ReadMatch(string sectionName, string key)
+        {
+	        if (!_sections.TryGetValue(sectionName.ToLowerInvariant(), out var section))
+	        {
+		        return null;
+	        }
+
+	        foreach (var k in section.Keys)
+	        {
+		        var pattern = CreateRegex(k);
+		        if (Regex.IsMatch(key, pattern, RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace))
+		        {
+			        return section.Values[k];
+		        }
+	        }
+
+	        return null;
+        }
+
+        internal static string CreateRegex(string searchPattern) //TODO move and make internal for test
+        {
+	        var sp = searchPattern.Replace("*", "~STAR~").Replace("?", "~QUESTION~");
+	        sp = Regex.Escape(sp);
+	        var regex=sp.Replace("~STAR~",".*").Replace("~QUESTION~", ".?");
+	        return regex;
+        }
+
         internal class Section
         {
-            private readonly Dictionary<string,string> _values=new Dictionary<string, string>();
+            private readonly Dictionary<string, string> _values=new Dictionary<string, string>();
+
             public string SectionName { get; }
+
+            public IEnumerable<string> Keys => _values.Keys;
+
+            public Dictionary<string, string> Values => _values;
 
             public Section(string sectionName)
             {
@@ -80,6 +113,10 @@ namespace KsWare.ToolSelector
             {
                 return _values.TryGetValue(key.ToLowerInvariant(), out value);
             }
+
+			public string this[string key] => _values[key];
         }
+
+
     }
 }
