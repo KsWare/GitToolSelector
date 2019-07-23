@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -9,18 +10,16 @@ namespace KsWare.GitToolSelector
     internal class IniFile
     {
 	    private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(typeof(IniFile));
-        public static string DefaultExtension { get; set; } = ".ini";
         private static readonly Regex SectionRegex=new Regex(@"\s*\[(?<section>[^\]]*)\].*", RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture | RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace);
-        private static readonly Regex ValueRegex=new Regex(@"^\s*(?<key>(("".*(?<!\\)"")|([a-z][^=]*)))\s*=\s*(?<value>.*)$", RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture | RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace);
+        private static readonly Regex ValueRegex=new Regex(@"^\s*(?<key>(("".*(?<!\\)"")|([^#;][^=]*(?!\s))))\s*=\s*(?<value>.*)$", RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture | RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace);
 
         string _path;
-        string _exe = Assembly.GetExecutingAssembly().GetName().Name;
-        private readonly Dictionary<string,Section> _sections=new Dictionary<string,Section>();
+        private readonly Dictionary<string,Section> _sections=new Dictionary<string,Section>(StringComparer.OrdinalIgnoreCase);
 
-        public IniFile(string path = null)
+        public IniFile(string path)
         {
-            _path = new FileInfo(path ?? _exe + DefaultExtension).FullName;
-			Log.Info($"Open: {path}");
+            _path = Path.GetFullPath(path);
+			Log.Info($"Open: {_path}");
             var lineNumber = 0;
             var section = new Section("",lineNumber);
             _sections.Add("",section);
@@ -35,18 +34,18 @@ namespace KsWare.GitToolSelector
                     {
                         var sectionName = sectionMatch.Groups["section"].Value;
                         section=new Section(sectionName, lineNumber);
-                        _sections.Add(sectionName.ToLowerInvariant(),section);
+                        _sections.Add(sectionName,section);
                         continue;
                     }
 
                     var valueMatch = ValueRegex.Match(line);
                     if (valueMatch.Success)
                     {
-	                    var key = valueMatch.Groups["key"].Value;
+	                    var key = valueMatch.Groups["key"].Value.Trim();
 	                    if (key.StartsWith("\""))
 	                    {
 							// \"→"  \\→\ 
-		                    key.Substring(1, key.Length - 2).Replace("\\\"", "\"").Replace(@"\\", @"\");
+							key = key.Substring(1, key.Length - 2).Replace("\\\"", "\"").Replace(@"\\", @"\");
 	                    }
                         section.Add(key, valueMatch.Groups["value"].Value.Trim());
 						continue;
@@ -73,7 +72,7 @@ namespace KsWare.GitToolSelector
 
         public string Read(string sectionName, string key)
         {
-            if (!_sections.TryGetValue(sectionName.ToLowerInvariant(), out var section))
+            if (!_sections.TryGetValue(sectionName, out var section))
             {
                 return null;
             }
@@ -88,7 +87,7 @@ namespace KsWare.GitToolSelector
 
         public string ReadMatch(string sectionName, string key)
         {
-	        if (!_sections.TryGetValue(sectionName.ToLowerInvariant(), out var section))
+	        if (!_sections.TryGetValue(sectionName, out var section))
 	        {
 		        return null;
 	        }
@@ -115,7 +114,7 @@ namespace KsWare.GitToolSelector
 
         internal class Section
         {
-            private readonly Dictionary<string, string> _values=new Dictionary<string, string>();
+            private readonly Dictionary<string, string> _values=new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
             public string SectionName { get; }
 
@@ -133,12 +132,12 @@ namespace KsWare.GitToolSelector
 
             public void Add(string key, string value)
             {
-                _values.Add(key.ToLowerInvariant(), value);
+                _values.Add(key, value);
             }
 
             public bool TryGetValue(string key, out string value)
             {
-                return _values.TryGetValue(key.ToLowerInvariant(), out value);
+                return _values.TryGetValue(key, out value);
             }
 
 			public string this[string key] => _values[key];

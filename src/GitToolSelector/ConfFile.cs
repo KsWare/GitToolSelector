@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 
 namespace KsWare.GitToolSelector
 {
@@ -10,8 +13,27 @@ namespace KsWare.GitToolSelector
 
         public ConfFile()
         {
-            IniFile.DefaultExtension = ".conf";
-            _iniFile = new IniFile();
+	        var locations = new[]
+	        {
+		        GetFileFromUserFolder(),
+		        GetFileFromAssemblyLocation()
+	        };
+
+	        foreach (var path in locations)
+	        {
+		        if (File.Exists(path))
+		        {
+			        FullPath = path;
+					break;
+		        }
+	        }
+            if (!File.Exists(FullPath))
+            {
+				Log.Error($"Configuration file not found! Search path: {string.Join("\n",locations)}");
+            }
+
+            
+            _iniFile = new IniFile(FullPath);
             foreach (var sectionName in _iniFile.SectionNames)
             {
                 var filters = sectionName.Split(';');
@@ -20,6 +42,23 @@ namespace KsWare.GitToolSelector
                     _filterToSection.Add(filter,sectionName);
                 }
             }
+        }
+
+
+        public string FullPath { get; private set; }
+
+        internal string GetFileFromAssemblyLocation()
+        {
+	        var location = Assembly.GetExecutingAssembly().Location;
+	        var assemblyName = Assembly.GetExecutingAssembly().GetName().Name;
+	        var path = Path.Combine(Path.GetDirectoryName(location), assemblyName + ".conf");
+	        return path;
+        }
+
+        internal string GetFileFromUserFolder()
+        {
+	        var path = Path.Combine("%localappdata%", "KsWare", "GitToolSelector", "GitToolSelector.conf");
+	        return Environment.ExpandEnvironmentVariables(path);
         }
 
         public string GetExtensionFromOverrides(string fileName)

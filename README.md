@@ -15,15 +15,15 @@ Location: `%homepath%\.gitconfig`
   prompt = false
   keepBackup = false
 [difftool "diffselector"]
-  cmd = \"C:\\Program Files\\KsWare\\GitToolSelector\\GitToolSelector.exe\" -tool semanticdiff -s \"$LOCAL\" -d \"$REMOTE\"
-  keepBackup = false
+	cmd = \"C:\\Program Files\\KsWare\\GitToolSelector\\GitToolSelector.exe\" -tool diff -s \"$LOCAL\" -d \"$REMOTE\"
+	keepBackup = false
 [mergetool "mergeselector"]
-  cmd = \"C:\\Program Files\\KsWare\\GitToolSelector\\GitToolSelector.exe\" -tool semanticmerge -s \"$REMOTE\" -d \"$LOCAL\" -b \"$BASE\" -r \"$MERGED\"
+  cmd = \"C:\\Program Files\\KsWare\\GitToolSelector\\GitToolSelector.exe\" -tool merge -s \"$REMOTE\" -d \"$LOCAL\" -b \"$BASE\" -r \"$MERGED\"
   trustExitCode = true
 ```
 ### GitToolSelector.conf
 Location: `%ProgramFiles%\KsWare\GitToolSelector\GitToolSelector.conf`
-Only a shprt schematic excample. A complete config is included.
+Only a short schematic example. A complete configuration is included.
 ```ini
 [.xml;.xaml]
 MergeTool=semanticmerge

@@ -9,8 +9,6 @@ namespace KsWare.GitToolSelector
 {
     class Program
     {
-        static Dictionary<string,string> parameter=new Dictionary<string,string>();
-        private static ConfFile configuration;
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(typeof(Program));
 
         static int Main(string[] args)
@@ -21,33 +19,9 @@ namespace KsWare.GitToolSelector
 #endif
 		        Log.Info("Startup");
 		        Log.Debug($"args: {string.Join(" ", args)}");
-		        var arguments = args.ToList();
-		        while (arguments.Count > 0)
-		        {
-			        parameter.Add(arguments[0].Substring(1).ToLowerInvariant(), arguments[1]);
-			        arguments.RemoveAt(0);
-			        arguments.RemoveAt(0);
-		        }
-
-		        var ext = GetExtensionFromAnyFileParameter();
-		        configuration = new ConfFile();
-		        if (!parameter.TryGetValue("tool", out var toolId))
-		        {
-					Log.Error("Missing parameter! \"-tool\"");
-					return -1;
-		        }
-		        
-		        var externalParser = configuration.GetValue(ext, "ExternalParser");
-		        parameter.Add("externalparser", externalParser);
-		        var cmd = configuration.GetValue($"tool {toolId}","cmd").Trim();
-		        var psiExe = ParseFileName(cmd);
-		        var psiParameter = cmd.Substring(psiExe.Length).Trim();
-		        psiExe=psiExe.Trim('"');
-		        psiParameter = Regex.Replace(psiParameter, @"\$[a-zA-Z]+", new MatchEvaluator(ReplaceParameter));
-
-
-		        ProcessStartInfo psi = new ProcessStartInfo(psiExe, psiParameter);
-		        Log.Info($"Process.Start: {psiExe} {psiParameter}");
+		        var psi = Run(args);
+		        if (psi == null) return -1;
+		        Log.Info($"Process.Start: {psi.FileName} {psi.Arguments}");
 		        var process = Process.Start(psi);
 		        process.WaitForExit();
 		        Log.Info($"Process ExitCode: {process.ExitCode}");
@@ -62,7 +36,80 @@ namespace KsWare.GitToolSelector
 #endif
         }
 
-        private static string GetExtensionFromAnyFileParameter()
+        internal static ProcessStartInfo Run(string[] args)
+        {
+	        var parameter = CreateParameterDictionary(args);
+	        var configuration=new ConfFile();
+	        return CreateProcessStartInfo(parameter, configuration);
+        }
+
+        internal static ProcessStartInfo CreateProcessStartInfo(Dictionary<string,string> parameter, ConfFile configuration)
+        {
+	        if (!parameter.TryGetValue("tool", out var toolType)) // Diff|Merge
+	        {
+		        Log.Error("Missing parameter! \"-tool\"");
+		        return null;
+	        }
+
+	        var ext = GetExtensionFromAnyFileParameter(parameter, configuration);
+	        var externalParser = configuration.GetValue(ext, "ExternalParser");
+	        if (!string.IsNullOrEmpty(externalParser))
+	        {
+		        if (!File.Exists(externalParser))
+		        {
+					Log.Warn($"External parser not found! Continue with default settings. Path={externalParser}");
+					ext = "*";
+		        }
+		        else
+		        {
+			        parameter.Add("externalparser", externalParser);
+		        }
+	        }
+
+	        var toolSection = GetToolSection(ext, toolType, configuration);
+
+	        var cmd = configuration.GetValue($"tool {toolSection}","cmd").Trim();
+	        var psiExe = ParseFileName(cmd);
+	        var psiParameter = cmd.Substring(psiExe.Length).Trim();
+	        psiExe=psiExe.Trim('"');
+	        psiParameter = Regex.Replace(psiParameter, @"\$[a-zA-Z]+", m=>ReplaceParameter(m, parameter));
+
+
+	        ProcessStartInfo psi = new ProcessStartInfo(psiExe, psiParameter);
+	        return psi;
+        }
+
+        internal static Dictionary<string, string> CreateParameterDictionary(string[] args)
+        {
+	        var parameter = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+	        var arguments = args.ToList();
+	        while (arguments.Count > 0)
+	        {
+		        parameter.Add(arguments[0].Substring(1), arguments[1]);
+		        arguments.RemoveAt(0);
+		        arguments.RemoveAt(0);
+	        }
+
+	        return parameter;
+        }
+
+        private static string GetToolSection(string ext, string toolType, ConfFile configuration)
+        {
+	        var toolSection = configuration.GetValue(ext, $"{toolType}Tool");
+	        if (string.IsNullOrEmpty(toolSection))
+	        {
+		        Log.Warn($"Configuration for extension not found! Continue with default settings. Extension={ext}");
+		        toolSection=configuration.GetValue("*", $"{toolType}Tool");
+	        }
+	        if (string.IsNullOrEmpty(toolSection))
+	        {
+		        Log.Error($"Configuration for default not found! Make sure there's a [*] section in configuration file. Path={configuration.FullPath}");
+	        }
+
+	        return toolSection;
+        }
+
+        internal static string GetExtensionFromAnyFileParameter(Dictionary<string, string> parameter, ConfFile configuration)
         {
             foreach (var s in parameter)
             {
@@ -86,7 +133,7 @@ namespace KsWare.GitToolSelector
             return null;
         }
 
-        public static string ReplaceParameter(Match m)
+        public static string ReplaceParameter(Match m, Dictionary<string,string> parameter)
         {
             var name = m.Value.Substring(1);
             if (!parameter.TryGetValue(name, out var value))
@@ -112,6 +159,8 @@ namespace KsWare.GitToolSelector
                 return cmd.Substring(0, p);
             }
         }
+
+        
     }
 }
 /*
