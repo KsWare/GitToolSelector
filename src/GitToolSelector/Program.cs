@@ -13,7 +13,7 @@ namespace KsWare.GitToolSelector
         private static ConfFile configuration;
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(typeof(Program));
 
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
 #if(!DEBUG)
 	        try
@@ -34,7 +34,7 @@ namespace KsWare.GitToolSelector
 		        if (!parameter.TryGetValue("tool", out var toolId))
 		        {
 					Log.Error("Missing parameter! \"-tool\"");
-					return;
+					return -1;
 		        }
 		        
 		        var externalParser = configuration.GetValue(ext, "ExternalParser");
@@ -48,12 +48,16 @@ namespace KsWare.GitToolSelector
 
 		        ProcessStartInfo psi = new ProcessStartInfo(psiExe, psiParameter);
 		        Log.Info($"Process.Start: {psiExe} {psiParameter}");
-		        Process.Start(psi);
+		        var process = Process.Start(psi);
+		        process.WaitForExit();
+		        Log.Info($"Process ExitCode: {process.ExitCode}");
+		        return process.ExitCode;
 #if(!DEBUG)
 	        }
 	        catch (Exception ex)
 	        {
 		        Log.Fatal("Oops, something really went wrong.", ex);
+				return -1;
 	        }
 #endif
         }
