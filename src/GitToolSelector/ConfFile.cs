@@ -4,6 +4,7 @@ namespace KsWare.GitToolSelector
 {
     class ConfFile
     {
+	    private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(typeof(IniFile));
         private IniFile _iniFile;
         private readonly Dictionary<string,string> _filterToSection=new Dictionary<string, string>();
 

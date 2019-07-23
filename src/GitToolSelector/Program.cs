@@ -11,31 +11,51 @@ namespace KsWare.GitToolSelector
     {
         static Dictionary<string,string> parameter=new Dictionary<string,string>();
         private static ConfFile configuration;
+        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(typeof(Program));
 
         static void Main(string[] args)
         {
-            var arguments = args.ToList();
-            while (arguments.Count > 0)
-            {
-                parameter.Add(arguments[0].Substring(1), arguments[1]);
-                arguments.RemoveAt(0);
-                arguments.RemoveAt(0);
-            }
+#if(!DEBUG)
+	        try
+	        {
+#endif
+		        Log.Info("Startup");
+		        Log.Debug($"args: {string.Join(" ", args)}");
+		        var arguments = args.ToList();
+		        while (arguments.Count > 0)
+		        {
+			        parameter.Add(arguments[0].Substring(1).ToLowerInvariant(), arguments[1]);
+			        arguments.RemoveAt(0);
+			        arguments.RemoveAt(0);
+		        }
 
-            var ext = GetExtensionFromAnyFileParameter();
-            configuration = new ConfFile();
-            var toolId = parameter["tool"];
-            var externalParser = configuration.GetValue(ext, "ExternalParser");
-            parameter.Add("EXTERNALPARSER", externalParser);
-            var cmd = configuration.GetValue($"tool {toolId}","cmd").Trim();
-            var psiExe = ParseFileName(cmd);
-            var psiParameter = cmd.Substring(psiExe.Length).Trim();
-            psiExe=psiExe.Trim('"');
-            psiParameter = Regex.Replace(psiParameter, @"\$[a-zA-Z]+", new MatchEvaluator(ReplaceParameter));
+		        var ext = GetExtensionFromAnyFileParameter();
+		        configuration = new ConfFile();
+		        if (!parameter.TryGetValue("tool", out var toolId))
+		        {
+					Log.Error("Missing parameter! \"-tool\"");
+					return;
+		        }
+		        
+		        var externalParser = configuration.GetValue(ext, "ExternalParser");
+		        parameter.Add("externalparser", externalParser);
+		        var cmd = configuration.GetValue($"tool {toolId}","cmd").Trim();
+		        var psiExe = ParseFileName(cmd);
+		        var psiParameter = cmd.Substring(psiExe.Length).Trim();
+		        psiExe=psiExe.Trim('"');
+		        psiParameter = Regex.Replace(psiParameter, @"\$[a-zA-Z]+", new MatchEvaluator(ReplaceParameter));
 
 
-            ProcessStartInfo psi = new ProcessStartInfo(psiExe, psiParameter);
-            Process.Start(psi);
+		        ProcessStartInfo psi = new ProcessStartInfo(psiExe, psiParameter);
+		        Log.Info($"Process.Start: {psiExe} {psiParameter}");
+		        Process.Start(psi);
+#if(!DEBUG)
+	        }
+	        catch (Exception ex)
+	        {
+		        Log.Fatal("Oops, something really went wrong.", ex);
+	        }
+#endif
         }
 
         private static string GetExtensionFromAnyFileParameter()

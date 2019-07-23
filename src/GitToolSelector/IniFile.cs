@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -9,6 +8,7 @@ namespace KsWare.GitToolSelector
 {
     internal class IniFile
     {
+	    private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(typeof(IniFile));
         public static string DefaultExtension { get; set; } = ".ini";
         private static readonly Regex SectionRegex=new Regex(@"\s*\[(?<section>[^\]]*)\].*", RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture | RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace);
         private static readonly Regex ValueRegex=new Regex(@"^\s*(?<key>(("".*(?<!\\)"")|([a-z][^=]*)))\s*=\s*(?<value>.*)$", RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture | RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace);
@@ -20,6 +20,7 @@ namespace KsWare.GitToolSelector
         public IniFile(string path = null)
         {
             _path = new FileInfo(path ?? _exe + DefaultExtension).FullName;
+			Log.Info($"Open: {path}");
             var lineNumber = 0;
             var section = new Section("",lineNumber);
             _sections.Add("",section);
@@ -63,7 +64,7 @@ namespace KsWare.GitToolSelector
 	                    continue;
                     }
 
-					Debug.WriteLine($"Unknown content in line {1} skipped: {line}");
+					Log.Warn($"Unknown content in line {lineNumber} skipped: {line}");
                 }
             }
         }
