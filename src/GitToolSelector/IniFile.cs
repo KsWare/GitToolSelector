@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -6,11 +7,11 @@ using System.Text.RegularExpressions;
 
 namespace KsWare.GitToolSelector
 {
-    class IniFile
+    internal class IniFile
     {
         public static string DefaultExtension { get; set; } = ".ini";
         private static readonly Regex SectionRegex=new Regex(@"\s*\[(?<section>[^\]]*)\].*", RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture | RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace);
-        private static readonly Regex ValueRegex=new Regex(@"^\s*(?<key>([a-z][^=\s]*))\s*=\s*(?<value>.*)$", RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture | RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace);
+        private static readonly Regex ValueRegex=new Regex(@"^\s*(?<key>(("".*(?<!\\)"")|([a-z][^=]*)))\s*=\s*(?<value>.*)$", RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture | RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace);
 
         string _path;
         string _exe = Assembly.GetExecutingAssembly().GetName().Name;
@@ -18,19 +19,21 @@ namespace KsWare.GitToolSelector
 
         public IniFile(string path = null)
         {
-            _path = new FileInfo(path ?? _exe + DefaultExtension).FullName.ToString();
-            var section = new Section("");
+            _path = new FileInfo(path ?? _exe + DefaultExtension).FullName;
+            var lineNumber = 0;
+            var section = new Section("",lineNumber);
             _sections.Add("",section);
             using (var stream = File.OpenText(_path))
             {
                 string line;
                 while ((line=stream.ReadLine())!=null)
                 {
+	                lineNumber++;
                     var sectionMatch = SectionRegex.Match(line);
                     if (sectionMatch.Success)
                     {
                         var sectionName = sectionMatch.Groups["section"].Value;
-                        section=new Section(sectionName);
+                        section=new Section(sectionName, lineNumber);
                         _sections.Add(sectionName.ToLowerInvariant(),section);
                         continue;
                     }
@@ -38,9 +41,29 @@ namespace KsWare.GitToolSelector
                     var valueMatch = ValueRegex.Match(line);
                     if (valueMatch.Success)
                     {
-                        section.Add(valueMatch.Groups["key"].Value, valueMatch.Groups["value"].Value.Trim());
+	                    var key = valueMatch.Groups["key"].Value;
+	                    if (key.StartsWith("\""))
+	                    {
+							// \"→"  \\→\ 
+		                    key.Substring(1, key.Length - 2).Replace("\\\"", "\"").Replace(@"\\", @"\");
+	                    }
+                        section.Add(key, valueMatch.Groups["value"].Value.Trim());
+						continue;
                     }
 
+                    line = line.Trim();
+
+                    if(line.StartsWith("#") || line.StartsWith(";")) // comment
+                    {
+	                    continue;
+                    }
+
+                    if(string.IsNullOrWhiteSpace(line)) // empty line
+                    {
+	                    continue;
+                    }
+
+					Debug.WriteLine($"Unknown content in line {1} skipped: {line}");
                 }
             }
         }
@@ -95,13 +118,16 @@ namespace KsWare.GitToolSelector
 
             public string SectionName { get; }
 
+			public int LineNumber { get; }
+
             public IEnumerable<string> Keys => _values.Keys;
 
             public Dictionary<string, string> Values => _values;
 
-            public Section(string sectionName)
+            public Section(string sectionName, int lineNumber)
             {
                 SectionName = sectionName;
+                LineNumber = lineNumber;
             }
 
             public void Add(string key, string value)
@@ -116,7 +142,5 @@ namespace KsWare.GitToolSelector
 
 			public string this[string key] => _values[key];
         }
-
-
     }
 }
