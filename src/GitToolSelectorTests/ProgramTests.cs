@@ -17,18 +17,18 @@ namespace KsWare.GitToolSelectorTests
 		[SetUp]
 		public void Setup()
 		{
-			File.Copy(TestHelper.GetTestDataPath("GitToolSelector.conf"),
-				Path.Combine(Environment.CurrentDirectory, "GitToolSelector.conf"));
-			fileA = TestHelper.GetTestDataPath("Resource1.resx");
-			fileB = TestHelper.GetTestDataPath("Resource2.resx");
+			Program.ConfigFile = TestHelper.GetTestDataPath("GitToolSelector.conf");
+			Program.DisableExternalParserExistCheck = true;
 			externalParser = "C:\\Program Files\\SemanticMerge\\External\\XmlSemanticParser.exe";
 			semanticMergeTool = "C:\\Program Files\\SemanticMerge\\semanticmergetool.exe";
 		}
 
 		[Test]
-		public void RunTest()
+		public void RunDiffXmlTest()
 		{
-			var args = new[] {"-tool", "diff", "-s", fileA, "-d", fileB};
+			fileA = TestHelper.GetTestDataPath("Test1.xml");
+			fileB = TestHelper.GetTestDataPath("Test1.xml");
+			var args = new[] { "-tool", "diff", "-s", fileA, "-d", fileB };
 
 			var sut = Program.Run(args);
 			Assert.That(sut.FileName, Is.EqualTo(semanticMergeTool));

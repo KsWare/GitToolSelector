@@ -11,13 +11,14 @@ namespace KsWare.GitToolSelector
         private IniFile _iniFile;
         private readonly Dictionary<string,string> _filterToSection=new Dictionary<string, string>();
 
-        public ConfFile()
+        public ConfFile(string configFile)
         {
-	        var locations = new[]
+	        var locations = new List<string>
 	        {
-		        GetFileFromUserFolder(),
+				GetFileFromUserFolder(),
 		        GetFileFromAssemblyLocation()
 	        };
+			if(!string.IsNullOrEmpty(configFile)) locations.Insert(0, configFile);
 
 	        foreach (var path in locations)
 	        {

@@ -10,6 +10,8 @@ namespace KsWare.GitToolSelector
     class Program
     {
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(typeof(Program));
+        internal static string ConfigFile { get; set; }
+        internal static bool DisableExternalParserExistCheck { get; set; }
 
         static int Main(string[] args)
         {
@@ -39,7 +41,7 @@ namespace KsWare.GitToolSelector
         internal static ProcessStartInfo Run(string[] args)
         {
 	        var parameter = CreateParameterDictionary(args);
-	        var configuration=new ConfFile();
+	        var configuration=new ConfFile(ConfigFile);
 	        return CreateProcessStartInfo(parameter, configuration);
         }
 
@@ -55,7 +57,7 @@ namespace KsWare.GitToolSelector
 	        var externalParser = configuration.GetValue(ext, "ExternalParser");
 	        if (!string.IsNullOrEmpty(externalParser))
 	        {
-		        if (!File.Exists(externalParser))
+		        if (!DisableExternalParserExistCheck && !File.Exists(externalParser))
 		        {
 					Log.Warn($"External parser not found! Continue with default settings. Path={externalParser}");
 					ext = "*";
