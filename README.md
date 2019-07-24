@@ -17,7 +17,8 @@ Location: `%homepath%\.gitconfig`
   trustExitCode = true
 ```
 ### MergeToolSelector.conf
-Location: `%ProgramFiles%\KsWare\MergeToolSelector\MergeToolSelector.conf`
+Location (User): `%localappdata%\KsWare\MergeToolSelector\0.9\MergeToolSelector.conf`
+Location (Bin): `%ProgramFiles%\KsWare\MergeToolSelector\MergeToolSelector.conf`
 Only a short schematic example. A complete configuration is included.
 ```ini
 [.xml;.xaml]
@@ -31,8 +32,8 @@ Only a short schematic example. A complete configuration is included.
   ExternalParser=C:\Program Files\SemanticMerge\External\ResXSemanticParser.exe
 
 [*]
-MergeTool=semanticmerge
-DiffTool=semanticdiff
+  MergeTool=semanticmerge
+  DiffTool=semanticdiff
 
 [tool semanticdiff]
   cmd="C:\Program Files\SemanticMerge\semanticmergetool.exe" -s "$s" -d "$d"
