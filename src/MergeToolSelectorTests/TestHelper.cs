@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Reflection;
 
-namespace KsWare.GitToolSelectorTests
+namespace KsWare.MergeToolSelectorTests
 {
     static class TestHelper
     {

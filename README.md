@@ -1,4 +1,4 @@
-# GitToolSelector
+# MergeToolSelector
 A configurable selector for merge/diff tools. Mainly developed for SemanticMerge external parser support.
 
 ## Configuration
@@ -15,14 +15,14 @@ Location: `%homepath%\.gitconfig`
   prompt = false
   keepBackup = false
 [difftool "diffselector"]
-	cmd = \"C:\\Program Files\\KsWare\\GitToolSelector\\GitToolSelector.exe\" -tool diff -s \"$LOCAL\" -d \"$REMOTE\"
+	cmd = \"C:\\Program Files\\KsWare\\MergeToolSelector\\MergeToolSelector.exe\" -tool diff -s \"$LOCAL\" -d \"$REMOTE\"
 	keepBackup = false
 [mergetool "mergeselector"]
-  cmd = \"C:\\Program Files\\KsWare\\GitToolSelector\\GitToolSelector.exe\" -tool merge -s \"$REMOTE\" -d \"$LOCAL\" -b \"$BASE\" -r \"$MERGED\"
+  cmd = \"C:\\Program Files\\KsWare\\MergeToolSelector\\MergeToolSelector.exe\" -tool merge -s \"$REMOTE\" -d \"$LOCAL\" -b \"$BASE\" -r \"$MERGED\"
   trustExitCode = true
 ```
-### GitToolSelector.conf
-Location: `%ProgramFiles%\KsWare\GitToolSelector\GitToolSelector.conf`
+### MergeToolSelector.conf
+Location: `%ProgramFiles%\KsWare\MergeToolSelector\MergeToolSelector.conf`
 Only a short schematic example. A complete configuration is included.
 ```ini
 [.xml;.xaml]
@@ -35,8 +35,8 @@ ExternalParser=C:\Program Files\SemanticMerge\External\XmlSemanticParser.exe
 cmd="C:\Program Files\SemanticMerge\semanticmergetool.exe" -s "$s" -d "$d" -ep "$EXTERNALPARSER"
 
 [tool semanticmerge]
-cmd="C:\Program Files\SemanticMerge\semanticmergetool.exe" -s "$s" -d "$d" -b "$b\" -r "$r" -ep "$EXTERNALPARSER"
+cmd="C:\Program Files\SemanticMerge\semanticmergetool.exe" -s "$s" -d "$d" -b "$b" -r "$r" -ep "$EXTERNALPARSER"
 
 [Overrides]
-*\GitToolSelector.conf = .ini
+*\MergeToolSelector.conf = .ini
 ```

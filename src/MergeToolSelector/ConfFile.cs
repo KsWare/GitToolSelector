@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
-namespace KsWare.GitToolSelector
+namespace KsWare.MergeToolSelector
 {
     class ConfFile
     {
@@ -58,7 +58,7 @@ namespace KsWare.GitToolSelector
 
         internal string GetFileFromUserFolder()
         {
-	        var path = Path.Combine("%localappdata%", "KsWare", "GitToolSelector", "GitToolSelector.conf");
+	        var path = Path.Combine("%localappdata%", "KsWare", "MergeToolSelector", "MergeToolSelector.conf");
 	        return Environment.ExpandEnvironmentVariables(path);
         }
 

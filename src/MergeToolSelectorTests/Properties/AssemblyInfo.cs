@@ -1,11 +1,11 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("KsWare GitToolSelectorTests")]
+[assembly: AssemblyTitle("KsWare MergeToolSelectorTests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("KsWare")]
-[assembly: AssemblyProduct("GitToolSelectorTests")]
+[assembly: AssemblyProduct("MergeToolSelectorTests")]
 [assembly: AssemblyCopyright("Copyright © 2019 by KsWare")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

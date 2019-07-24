@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
-namespace KsWare.GitToolSelector
+namespace KsWare.MergeToolSelector
 {
     internal class IniFile
     {

@@ -4,10 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using KsWare.GitToolSelector;
+using KsWare.MergeToolSelector;
 using NUnit.Framework;
 
-namespace KsWare.GitToolSelectorTests
+namespace KsWare.MergeToolSelectorTests
 {
 	[TestFixture]
 	public class ProgramTests
@@ -17,7 +17,7 @@ namespace KsWare.GitToolSelectorTests
 		[SetUp]
 		public void Setup()
 		{
-			Program.ConfigFile = TestHelper.GetTestDataPath("GitToolSelector.conf");
+			Program.ConfigFile = TestHelper.GetTestDataPath("MergeToolSelector.conf");
 			Program.DisableExternalParserExistCheck = true;
 			externalParser = "C:\\Program Files\\SemanticMerge\\External\\XmlSemanticParser.exe";
 			semanticMergeTool = "C:\\Program Files\\SemanticMerge\\semanticmergetool.exe";

@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{6F2B52B6-1839-48AD-8C72-C1722B26D7C4}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>KsWare.GitToolSelector</RootNamespace>
-    <AssemblyName>GitToolSelector</AssemblyName>
+    <RootNamespace>KsWare.MergeToolSelector</RootNamespace>
+    <AssemblyName>MergeToolSelector</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -63,7 +63,7 @@
     </Content>
     <Content Include="Properties\app.ico" />
     <None Include="App.config" />
-    <Content Include="GitToolSelector.conf">
+    <Content Include="MergeToolSelector.conf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="packages.config" />

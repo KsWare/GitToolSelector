@@ -9,8 +9,8 @@
     <ProjectGuid>{9C082A85-A170-458E-B452-E68141990FBD}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>KsWare.GitToolSelectorTests</RootNamespace>
-    <AssemblyName>GitToolSelectorTests</AssemblyName>
+    <RootNamespace>KsWare.MergeToolSelectorTests</RootNamespace>
+    <AssemblyName>MergeToolSelectorTests</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -62,7 +62,7 @@
     <Compile Include="TestHelper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="TestData\GitToolSelector.conf">
+    <Content Include="TestData\MergeToolSelector.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="TestData\Test2.xml">
@@ -73,9 +73,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GitToolSelector\GitToolSelector.csproj">
+    <ProjectReference Include="..\MergeToolSelector\MergeToolSelector.csproj">
       <Project>{6f2b52b6-1839-48ad-8c72-c1722b26d7c4}</Project>
-      <Name>GitToolSelector</Name>
+      <Name>MergeToolSelector</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

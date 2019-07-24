@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29020.237
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitToolSelector", "GitToolSelector\GitToolSelector.csproj", "{6F2B52B6-1839-48AD-8C72-C1722B26D7C4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MergeToolSelector", "MergeToolSelector\MergeToolSelector.csproj", "{6F2B52B6-1839-48AD-8C72-C1722B26D7C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitToolSelectorTests", "GitToolSelectorTests\GitToolSelectorTests.csproj", "{9C082A85-A170-458E-B452-E68141990FBD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MergeToolSelectorTests", "MergeToolSelectorTests\MergeToolSelectorTests.csproj", "{9C082A85-A170-458E-B452-E68141990FBD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
