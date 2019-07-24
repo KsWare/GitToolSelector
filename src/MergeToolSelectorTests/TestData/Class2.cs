@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KsWare.GitToolSelectorTests.TestData
+namespace KsWare.MergeToolSelectorTests.TestData
 {
-    class Class1
+    class Class2
     {
+		public Class2(){}
     }
 }

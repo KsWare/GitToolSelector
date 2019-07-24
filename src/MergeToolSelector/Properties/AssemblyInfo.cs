@@ -2,11 +2,11 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("KsWare GitToolSelector")]
+[assembly: AssemblyTitle("KsWare MergeToolSelector")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("KsWare")]
-[assembly: AssemblyProduct("GitToolSelector")]
+[assembly: AssemblyProduct("MergeToolSelector")]
 [assembly: AssemblyCopyright("Copyright © 2019 by KsWare")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -19,4 +19,4 @@ using System.Runtime.InteropServices;
 
 [assembly: log4net.Config.XmlConfigurator(ConfigFile = "log4net.config")]
 
-[assembly: InternalsVisibleTo("GitToolSelectorTests")]
+[assembly: InternalsVisibleTo("MergeToolSelectorTests")]

@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace KsWare.GitToolSelector
+namespace KsWare.MergeToolSelector
 {
     class Program
     {
@@ -21,6 +21,7 @@ namespace KsWare.GitToolSelector
 #endif
 		        Log.Info("Startup");
 		        Log.Debug($"args: {string.Join(" ", args)}");
+				if(ExecEditCommand(args)) return 0;
 		        var psi = Run(args);
 		        if (psi == null) return -1;
 		        Log.Info($"Process.Start: {psi.FileName} {psi.Arguments}");
@@ -36,6 +37,25 @@ namespace KsWare.GitToolSelector
 				return -1;
 	        }
 #endif
+        }
+
+        private static bool ExecEditCommand(string[] args)
+        {
+	        if (args.Length != 2) return false;
+	        if (args[0] != "-edit") return false;
+	        switch (args[1].ToLowerInvariant())
+	        {
+		        case "mergetoolselector.conf" : 
+			        Process.Start("notepad.exe", ConfFile.GetFileFromUserFolder());
+					return true;
+		        case ".gitconfig" : 
+//			        Process.Start("notepad.exe", Environment.ExpandEnvironmentVariables(@"%USERPROFILE%\.gitconfig"));
+			        Process.Start(Environment.ExpandEnvironmentVariables(@"%USERPROFILE%\.gitconfig"));
+			        return true;
+				default:
+					return false;
+	        }
+	        
         }
 
         internal static ProcessStartInfo Run(string[] args)

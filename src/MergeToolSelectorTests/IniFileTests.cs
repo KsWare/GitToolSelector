@@ -1,7 +1,7 @@
-﻿using KsWare.GitToolSelector;
+﻿using KsWare.MergeToolSelector;
 using NUnit.Framework;
 
-namespace KsWare.GitToolSelectorTests
+namespace KsWare.MergeToolSelectorTests
 {
     [TestFixture]
     public class IniFileTests
@@ -9,7 +9,7 @@ namespace KsWare.GitToolSelectorTests
         [Test]
         public void TestMethod1()
         {
-            var n= TestHelper.GetTestDataPath("GitToolSelector.conf");
+            var n= TestHelper.GetTestDataPath("MergeToolSelector.conf");
             var sut = new IniFile(n);
             Assert.That(sut.Read("test1", "a"),Is.EqualTo("\"C:\\Path\\foo.exe\" \"foo\" \"bar\""));
             Assert.That(sut.Read("test1", "b"),Is.EqualTo("\"C:\\Path\\foo.exe\" \"foo\" bar"));
