@@ -56,9 +56,9 @@ namespace KsWare.MergeToolSelector
 	        return path;
         }
 
-        internal string GetFileFromUserFolder()
+        internal static string GetFileFromUserFolder()
         {
-	        var path = Path.Combine("%localappdata%", "KsWare", "MergeToolSelector", "MergeToolSelector.conf");
+	        var path = Path.Combine("%localappdata%", "KsWare", "MergeToolSelector","0.9", "MergeToolSelector.conf");
 	        return Environment.ExpandEnvironmentVariables(path);
         }
 

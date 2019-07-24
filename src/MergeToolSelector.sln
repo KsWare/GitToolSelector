@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MergeToolSelector", "MergeT
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MergeToolSelectorTests", "MergeToolSelectorTests\MergeToolSelectorTests.csproj", "{9C082A85-A170-458E-B452-E68141990FBD}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Installer", "Installer\Installer.vdproj", "{A7904324-8FBB-4C0D-9089-5656BB5C9ADF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,8 @@ Global
 		{9C082A85-A170-458E-B452-E68141990FBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9C082A85-A170-458E-B452-E68141990FBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9C082A85-A170-458E-B452-E68141990FBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7904324-8FBB-4C0D-9089-5656BB5C9ADF}.Debug|Any CPU.ActiveCfg = Debug
+		{A7904324-8FBB-4C0D-9089-5656BB5C9ADF}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

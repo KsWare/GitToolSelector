@@ -15,10 +15,10 @@ Location: `%homepath%\.gitconfig`
   prompt = false
   keepBackup = false
 [difftool "diffselector"]
-	cmd = \"C:\\Program Files\\KsWare\\MergeToolSelector\\MergeToolSelector.exe\" -tool diff -s \"$LOCAL\" -d \"$REMOTE\"
+	cmd = \"C:\\Program Files (x86)\\KsWare\\MergeToolSelector\\MergeToolSelector.exe\" -tool diff -s \"$LOCAL\" -d \"$REMOTE\"
 	keepBackup = false
 [mergetool "mergeselector"]
-  cmd = \"C:\\Program Files\\KsWare\\MergeToolSelector\\MergeToolSelector.exe\" -tool merge -s \"$REMOTE\" -d \"$LOCAL\" -b \"$BASE\" -r \"$MERGED\"
+  cmd = \"C:\\Program Files (x86)\\KsWare\\MergeToolSelector\\MergeToolSelector.exe\" -tool merge -s \"$REMOTE\" -d \"$LOCAL\" -b \"$BASE\" -r \"$MERGED\"
   trustExitCode = true
 ```
 ### MergeToolSelector.conf
