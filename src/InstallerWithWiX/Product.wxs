@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"><?define MergeToolSelector_TargetDir=$(var.MergeToolSelector.TargetDir)?>
+	<Product 
+    Id="3E8E1974-4B80-4AB5-A000-D6058C45477A" 
+    Name="MergeToolSelector" 
+    Language="1033" 
+    Version="0.9.0.0" 
+    Manufacturer="KsWare" 
+    UpgradeCode="0f0d4d12-c453-4cc2-acfb-6c2d83dcd6e9">
+		<Package InstallerVersion="300" Compressed="yes" InstallScope="perMachine" />
+    <Media Id="1" Cabinet="MergeToolSelector.cab" EmbedCab="yes" />
+
+    <!-- Installer Icon -->
+    <Icon Id="app.ico" SourceFile="$(var.ProjectDir)Resources\app.ico"/>
+    <Property Id="ARPPRODUCTICON" Value="app.ico" />
+
+    <!-- license -->
+    <WixVariable Id="WixUILicenseRtf" Value="$(var.ProjectDir)Resources\license.rtf" />
+
+    <UIRef Id="WixUI_Minimal"/>
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+
+		<Feature Id="ProductFeature" Title="Merge Tool Selector" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+      <ComponentRef Id="StartMenuShortcuts"/>
+    </Feature>
+
+	</Product>
+
+  <!-- Folder Structure-->
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+        <Directory Id="ProgramFilesManufacturerFolder" Name="KsWare">
+          <Directory Id="INSTALLFOLDER" Name="MergeToolSelector" />
+        </Directory>
+			</Directory>
+      <Directory Id="ProgramMenuFolder">
+        <!-- <Directory Id="ProgramMenuManufacturerFolder" Name="KsWare"> -->
+          <Directory Id="ProgramMenuApplicationFolder" Name="MergeToolSelector" />
+        <!-- </Directory> -->
+      </Directory>
+		</Directory>
+	</Fragment>
+
+  <!-- Program Files -->
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+			<Component Id="ProductComponent" Guid="4ED8DA6D-4F68-4E0B-BFDB-794D65DFDB46">
+	      <File Id="log4net.config" Name="log4net.config" Source="$(var.MergeToolSelector_TargetDir)log4net.config" />
+	      <File Id="MergeToolSelector.conf" Name="MergeToolSelector.conf" Source="$(var.MergeToolSelector_TargetDir)MergeToolSelector.conf" />
+	      <File Id="MergeToolSelector.exe" Name="MergeToolSelector.exe" Source="$(var.MergeToolSelector_TargetDir)MergeToolSelector.exe" />
+	      <File Id="MergeToolSelector.exe.config" Name="MergeToolSelector.exe.config" Source="$(var.MergeToolSelector_TargetDir)MergeToolSelector.exe.config" />
+	      <File Id="log4net.dll" Name="log4net.dll" Source="$(var.MergeToolSelector_TargetDir)log4net.dll" />
+        <File Id="license.rtf" Name="license.rtf" Source="$(var.MergeToolSelector_TargetDir)\Properties\license.rtf" />
+        <RemoveFolder Id="INSTALLFOLDER" On="uninstall"/>
+        <RemoveFolder Id="ProgramFilesManufacturerFolder" On="uninstall"/>
+        <RegistryValue Root="HKCU" Key="Software\KsWare\MergeToolSelector" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+      </Component>
+		</ComponentGroup>
+	</Fragment>
+
+	<!-- <Fragment> -->
+	<!--   <ComponentGroup Id="ProgramFilesFolder_files" Directory="INSTALLFOLDER"> -->
+ <!--      <Component Id="log4net.config" Guid="e2d37c0b-84b1-44b9-989f-840890cac880"> -->
+	<!--     </Component> -->
+	<!--     <Component Id="MergeToolSelector.conf" Guid="bf89b22f-942c-4627-b807-16cc3e952f9f"> -->
+	<!--     </Component> -->
+	<!--     <Component Id="MergeToolSelector.exe" Guid="ae251f32-e08b-4d1a-b305-83b543ef593e"> -->
+	<!--     </Component> -->
+	<!--     <Component Id="MergeToolSelector.exe.config" Guid="a70cf2ef-531a-4ff8-a8da-e8cd491475e6"> -->
+	<!--     </Component> -->
+	<!--     <Component Id="log4net.dll" Guid="956945e2-afff-48cf-b778-f4fa31142fe8"> -->
+	<!--     </Component> -->
+	<!--   </ComponentGroup> -->
+	<!-- </Fragment> -->
+
+  <Fragment>
+    <ComponentGroup Id="Shortcuts" Directory="ProgramMenuApplicationFolder">
+      <Component Id="StartMenuShortcuts" Guid="D646DCAF-40E0-4985-96A7-517A718662C2">
+        <Shortcut Id="EditConfigurationShortcut"
+                  Name="Edit MergeToolSelector.conf"
+                  Description="Edit MergeToolSelector.conf"
+                  Target="[#MergeToolSelector.exe]"
+                  Arguments="-edit MergeToolSelector.conf"
+                  WorkingDirectory="APPLICATIONROOTDIRECTORY" />
+        <Shortcut Id="EditGitConfigurationShortcut"
+                  Name="Edit .gitconfig"
+                  Description="Edit .gitconfig"
+                  Target="[#MergeToolSelector.exe]"
+                  Arguments="-edit .gitconfig"
+                  WorkingDirectory="APPLICATIONROOTDIRECTORY" />
+        <RemoveFolder Id="ProgramMenuApplicationFolder" On="uninstall" />
+        <!-- <RemoveFolder Id="ProgramMenuManufacturerFolder" On="uninstall" /> -->
+        <RegistryValue Root="HKCU" Key="Software\KsWare\MergeToolSelector" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>

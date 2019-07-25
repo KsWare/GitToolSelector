@@ -55,6 +55,10 @@
     <Content Include="log4net.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="..\InstallerWithWiX\Resources\license.rtf">
+      <Link>Properties\license.rtf</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Properties\app.ico" />
     <None Include="App.config" />
     <Content Include="MergeToolSelector.conf">
