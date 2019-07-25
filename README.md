@@ -1,5 +1,11 @@
 # MergeToolSelector
-A configurable selector for merge/diff tools. Mainly developed for SemanticMerge external parser support.
+A configurable selector for merge/diff tools. 
+The MergeToolSelector is able to selected different tool for different file extensions.  
+It was primarily developed for the external parser support of SemanticMerge.
+
+## Changelog
+- 2019-07-23 **v0.9.8** First public version
+- 2019-07-25 **v0.9.19** We have now a basic installer 
 
 ## Configuration
 ### .gitconfig

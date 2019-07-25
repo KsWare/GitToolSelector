@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"><?define MergeToolSelector_TargetDir=$(var.MergeToolSelector.TargetDir)?>
+<Wix 
+  xmlns="http://schemas.microsoft.com/wix/2006/wi"
+  xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension"
+  >
+  <?define MergeToolSelector_TargetDir=$(var.MergeToolSelector.TargetDir)?>
 	<Product 
     Id="3E8E1974-4B80-4AB5-A000-D6058C45477A" 
     Name="MergeToolSelector" 
