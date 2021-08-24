@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("KsWare")]
 [assembly: AssemblyProduct("MergeToolSelector")]
-[assembly: AssemblyCopyright("Copyright © 2019 by KsWare")]
+[assembly: AssemblyCopyright("Copyright © 2019-201 by KsWare. All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

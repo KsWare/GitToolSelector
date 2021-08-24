@@ -4,7 +4,7 @@
     Id="3E8E1974-4B80-4AB5-A000-D6058C45477A" 
     Name="MergeToolSelector" 
     Language="1033" 
-    Version="0.9.0.0" 
+    Version="0.10.0.0" 
     Manufacturer="KsWare" 
     UpgradeCode="0f0d4d12-c453-4cc2-acfb-6c2d83dcd6e9">
 		<Package InstallerVersion="300" Compressed="yes" InstallScope="perMachine" />
